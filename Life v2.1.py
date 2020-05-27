@@ -123,7 +123,7 @@ while is_game_continue:
 		board_print(current_map,print_method)
 		main()
 		pyplot.pause(0.1)
-    	pyplot.clf()
+    	#pyplot.clf()
 board_print(current_map,print_method)
 print(run_time_count)
 		
