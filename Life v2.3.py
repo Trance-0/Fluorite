@@ -67,13 +67,17 @@ def is_alive():
             if next_map[h][w]==1:
                 plot_data[w][h] = [cell_color[0],cell_color[1],cell_color[2],1.0]
 
-    for m in range(len(history_map)):
-        if compare_map(next_map,history_map[m]):
-            is_game_continue=False
+    if testing:
+        for m in range(len(history_map)):
+            if compare_map(next_map,history_map[m]):
+                is_game_continue=False
+    
     current_map=next_map
     history_map.append(next_map.copy())
     next_map=[[0 for i in range(width)] for j in range(height)]
     pyplot.imshow(plot_data)
+    pyplot.pause(0.1)
+    pyplot.clf()
 
 def compare_map(a,b):
     for i in range(len(a)):
@@ -99,13 +103,7 @@ seeds=seeds0
 initialization(width,height)
 seed(seeds)
 run_time_count=0
-if testing:
-    while is_game_continue and run_time_count<max_running_time:
-        is_alive()
-        run_time_count+=1
-    print(run_time_count)
-else:
-    while is_game_continue:
-        is_alive()
-        run_time_count+=1
-    print(run_time_count)
+while is_game_continue and run_time_count<max_running_time:
+    is_alive()
+    run_time_count+=1
+print(run_time_count)
