@@ -1,5 +1,6 @@
 from matplotlib import image
 from matplotlib import pyplot
+import time
 import numpy
 import os
 import random
@@ -87,7 +88,7 @@ def board_print(board):
         for w in range(width):
             if current_map[h][w]==1:
                 plot_data[w][h] = [cell_color[0],cell_color[1],cell_color[2],1.0]
-    pyplot.pause(0.01)
+    time.sleep(1)
     pyplot.imshow(plot_data)
 
 #seeds
