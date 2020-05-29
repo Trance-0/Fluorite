@@ -3,11 +3,12 @@ from mpl_toolkits import mplot3d
 import numpy as np
 import matplotlib.pyplot as plt
 import random
+import matplotlib as mpl
 
 #basic variables
-x=25
-y=25
-z=25
+x=10
+y=10
+z=10
 history_map=[]
 current_map=[]
 next_map=[]
@@ -15,7 +16,7 @@ blank_map=[]
 count=0
 is_game_continue=True
 testing=False
-printing_method='point'
+printing_method='pressure'
 max_running_time=1024
 cell_color=[0,0,0]
 survive=[4,5,6,7,8]
@@ -95,6 +96,7 @@ def is_alive():
     ydata=[]
     zdata=[]
     neigbordata=[]
+    narrow_neigbord=[]
     for a in range(x):
         for b in range(y):
             for c in range(z):
@@ -119,7 +121,7 @@ def is_alive():
                     xdata.append(a)
                     ydata.append(b)
                     zdata.append(c)
-
+                    narrow_neigbord.append(near_by_block)
                     alive_count+=1
 
                 #Survive Value
@@ -128,7 +130,7 @@ def is_alive():
                     xdata.append(a)
                     ydata.append(b)
                     zdata.append(c)
-
+                    narrow_neigbord.append(near_by_block)
                     alive_count+=1
 
                 else:
@@ -140,14 +142,16 @@ def is_alive():
         for a in range(x):
             for b in range(y):
                 for c in range(z):
-                    label = str(neigbordata[i])
+                    label = str(neigbordata[a*y*z+b*z+c])
                     ax.text(a,b,c, label)
 
     elif printing_method=="point":
         ax.scatter3D(xdata,ydata,zdata, color = 'blue')
 
-
-    #ax.scatter3D(a,b,c, c=z_points, cmap='hsv')
+    elif printing_method=="pressure":
+        cmap = mpl.cm.cool
+    #     ax.scatter3D(xdata,ydata,zdata, c=narrow_neigbord, cmap='hsv')
+        ax.scatter3D(xdata,ydata,zdata, c=narrow_neigbord, cmap=cmap)
 
     if testing:
         for m in range(len(history_map)):
