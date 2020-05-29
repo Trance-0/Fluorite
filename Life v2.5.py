@@ -1,5 +1,5 @@
 from matplotlib import image
-from matplotlib import pyplot
+from matplotlib import pyplot as plt
 import numpy
 import os
 import random
@@ -17,8 +17,8 @@ borad_color=[255,255,255]
 cell_color=[0,0,0]
 testing=False
 max_running_time=1024
-path = os.path.dirname(os.path.abspath(__file__))
-blank= path + '/' + 'Blank_100x100.png'
+survive=[2,3]
+born=[3]
 
 def rectangle_seeds(startx,starty,endx,endy):
     new_seeds=[]
@@ -44,8 +44,8 @@ def initialization (width,height):
 
 def is_alive():
     global next_map,current_map,is_game_continue,history_map
-    data = image.imread(blank)
-    plot_data = data.copy()
+    fig = plt.figure()
+    ax1 = fig.add_subplot(111)
     for w in range(width):
         for h in range(height):
             near_by_block=0
@@ -56,16 +56,16 @@ def is_alive():
                         near_by_block+=1
             
             # Born Value
-            if (near_by_block == 3) and current_map[h][w]==0:
+            if born.count(near_by_block)>0 and current_map[h][w]==0:
                 next_map[h][w]=1
             #Survive Value
-            elif (near_by_block == 2 or near_by_block == 3) and current_map[h][w]==1:
+            elif survive.count(near_by_block)>0 and current_map[h][w]==1:
                 next_map[h][w]=1
             else:
                 next_map[h][w]=0
 
             if next_map[h][w]==1:
-                plot_data[w][h] = [cell_color[0],cell_color[1],cell_color[2],1.0]
+                ax1.scatter(h,w,c = 'b',marker = 's')
 
     if testing:
         for m in range(len(history_map)):
@@ -75,9 +75,7 @@ def is_alive():
     current_map=next_map
     history_map.append(next_map.copy())
     next_map=[[0 for i in range(width)] for j in range(height)]
-    pyplot.imshow(plot_data)
-    pyplot.pause(0.001)
-    pyplot.clf()
+    plt.show()
 
 def compare_map(a,b):
     for i in range(len(a)):

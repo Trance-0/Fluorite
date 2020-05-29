@@ -17,6 +17,8 @@ borad_color=[255,255,255]
 cell_color=[0,0,0]
 testing=False
 max_running_time=1024
+survive=[2,3]
+born=[3]
 path = os.path.dirname(os.path.abspath(__file__))
 blank= path + '/' + 'Blank_100x100.png'
 
@@ -56,10 +58,10 @@ def is_alive():
                         near_by_block+=1
             
             # Born Value
-            if (near_by_block == 3) and current_map[h][w]==0:
+            if born.count(near_by_block)>0 and current_map[h][w]==0:
                 next_map[h][w]=1
             #Survive Value
-            elif (near_by_block == 2 or near_by_block == 3) and current_map[h][w]==1:
+            elif survive.count(near_by_block)>0 and current_map[h][w]==1:
                 next_map[h][w]=1
             else:
                 next_map[h][w]=0
