@@ -6,9 +6,9 @@ import random
 import matplotlib as mpl
 
 #basic variables
-x=10
-y=10
-z=10
+x=25
+y=25
+z=25
 history_map=[]
 current_map=[]
 next_map=[]
@@ -19,8 +19,8 @@ testing=False
 printing_method='pressure'
 max_running_time=1024
 cell_color=[0,0,0]
-survive=[4,5,6,7,8]
-born=[7,8]
+survive=[4,5,6,7,8,9,10]
+born=[8]
 
 
 #无限扩张
