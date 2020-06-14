@@ -22,10 +22,12 @@ stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
 
 
 data = wf.readframes(CHUNK)#音频数据初始化
+elapsedtime=0
 
 X=[]
 Y=[]
-fig, ax = plt.subplots()
+Z=[]
+ax= plt.axes
 
 while data != '':#直到音频放完
 
@@ -45,11 +47,15 @@ while data != '':#直到音频放完
 
     for i in range(len(Y)):
         X.append(i)
+        Z.append(elapsedtime)
 
     print(transforamed)
     # ax3d.plot_trisurf(X, Y, Z,cmap="hsv")
-    plt.bar(X,Y)
-    # plt.pause(0.1)
+    ax3d.scatter( X, Y, Z,color="blue")
+
+    elapsedtime+=1;
+    plt.show()
+    plt.pause(0.1)
     plt.clf()
 
 stream.stop_stream()
