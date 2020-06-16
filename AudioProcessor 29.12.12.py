@@ -22,14 +22,14 @@ stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
 
 
 data = wf.readframes(CHUNK)#音频数据初始化
-# elapsedtime=0
-fig = plt.figure()
-ax = plt.subplot(111, projection='polar')
+
 height=[]
 
 
 while data != '':#直到音频放完
-
+    # elapsedtime=0
+    fig = plt.figure()
+    ax = plt.subplot(111, projection='polar')
     stream.write(data)#播放缓冲流的音频
     data = wf.readframes(CHUNK)#更新data
     numpydata = np.fromstring(data, dtype=np.int16)#把data由字符串以十六进制的方式转变为数组
@@ -50,11 +50,12 @@ while data != '':#直到音频放完
     # colors = plt.cm.viridis(height / 10.)
     h=np.array(height)
     ax.bar(theta,h, width=width, bottom=0, alpha=0.5)
-    plt.draw()
+    # plt.draw()
     # elapsedtime+=1;
-    plt.show()
+    # plt.show()
     plt.pause(0.1)
-    fig.canvas.draw()
+    plt.clf()
+    # fig.canvas.draw()
 
 stream.stop_stream()
 stream.close()
