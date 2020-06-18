@@ -36,7 +36,7 @@ while True:
     hour = now_time.hour
     if hour>12: hour = hour - 12
     minute = now_time.minute
-    second = now_time.second
+    second = now_time.second*10
 
     # Calculate end points of hour, minute, second
 
@@ -48,5 +48,5 @@ while True:
     plt.arrow(center[0], center[1], minute_vector[0], minute_vector[1], linewidth = minute_hand_width, color = 'black')
     plt.arrow(center[0], center[1], second_vector[0], second_vector[1], linewidth = second_hand_width, color = 'red')
 
-    plt.pause(0.1)
+    plt.pause(0.01)
     plt.clf()
