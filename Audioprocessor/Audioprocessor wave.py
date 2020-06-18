@@ -8,10 +8,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 
-CHUNK = 16384#我把它理解为缓冲流
+CHUNK = 8192#我把它理解为缓冲流
 
 path = os.path.dirname(os.path.abspath(__file__))
 filename = path + '/TheFatRat & Anjulie - Close To The Sun.wav'
+# filename = path + '/Lesson17.mp3'
 wf = wave.open(filename, 'rb')#以只读的方式打开"1qom8-vi8uq.wav"文件
 
 #创建播放器
@@ -68,7 +69,7 @@ while data != '':#直到音频放完
     ax.axes.xaxis.set_ticks([])
     ax.axes.yaxis.set_ticks([])
     plt.pause(0.0000001)
-    plt.close()
+    plt.clf()
     # fig.canvas.draw()
 
 stream.stop_stream()
