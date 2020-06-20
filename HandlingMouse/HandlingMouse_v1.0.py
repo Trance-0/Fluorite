@@ -41,10 +41,9 @@ def on_release(key):
         # Stop listener
         return False
 
-# Collect ev    ents released
+# Collect events released
 with keyboard.Listener( on_press=on_press,on_release=on_release) as listener:
     listener.join() 
-    posision=mouse.posision( )
     # if on_press           
 
 
