@@ -1,4 +1,4 @@
-` from pynput import keyboard
+from pynput import keyboard
 from pynput.keyboard import Key, Listener   
 from pynput.mouse import Button, Controller
 
@@ -18,20 +18,20 @@ def on_release(key):
     print('{0} have been released'.format(key))
     position=mouse.position
     if  key != keyboard.Key.up:
-        up=True
-    if key == keyboard.Key.down:
-        down=True
-    if key == keyboard.Key.left:
-        left=True
-    if key == keyboard.Key.right:
-        right=True
-    if key == keyboard.Key.f13:
+        up=False
+    if key != keyboard.Key.down:
+        down=False
+    if key != keyboard.Key.left:
+        left=False
+    if key != keyboard.Key.right:
+        right=False
+    if key != keyboard.Key.f13:
         mouse.press(Button.left)
         mouse.release(Button.left)
-    if key == keyboard.Key.f15:
+    if key != keyboard.Key.f15:
         mouse.press(Button.right)
         mouse.release(Button.right)
-    if key == keyboard.Key.esc:
+    if key != keyboard.Key.esc:
         # Stop listener
         return False
 
