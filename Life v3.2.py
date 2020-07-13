@@ -19,8 +19,8 @@ testing=False
 printing_method='pressure'
 max_running_time=1024
 cell_color=[0,0,0]
-survive=[4,5,6,7,8,9,10]
-born=[8]
+survive=[4,5,6,7,8,9]
+born=[6]
 
 
 #无限扩张
@@ -36,6 +36,8 @@ born=[8]
 # survive=[4,5,6,7,8]
 # born=[6,7]
 
+# survive=[4,5,6,7,8,9,10]
+# born=[8]
 
 #有稳定结构出现
 # survive=[5,6,7,8,9,10,11]
@@ -178,7 +180,7 @@ def seed(seed_list):
         current_map[i[0]][i[1]][i[2]]=1
 
 #seeds
-seeds0= random_seeds(0.5)
+seeds0= random_seeds(0.3)
 seeds=seeds0
 
 initialization()

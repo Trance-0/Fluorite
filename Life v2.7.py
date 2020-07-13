@@ -1,12 +1,12 @@
 from matplotlib import image
-from matplotlib import pyplot
+from matplotlib import pyplot as plt
 import numpy
 import os
 import random
 
 #basic variables
-width=700
-height=700
+width=100
+height=100
 history_map=[]
 current_map=[]
 next_map=[]
@@ -15,8 +15,9 @@ count=0
 is_game_continue=True
 borad_color=[255,255,255]
 cell_color=[0,0,0]
-testing=False
+testing=True
 max_running_time=1024
+printing_method="picture"
 survive=[2,3]
 born=[3]
 path = os.path.dirname(os.path.abspath(__file__))
@@ -46,8 +47,20 @@ def initialization (width,height):
 
 def is_alive():
     global next_map,current_map,is_game_continue,history_map
-    data = image.imread(blank)
-    plot_data = data.copy()
+    if printing_method=="picture":
+        data = image.imread(blank)
+        plot_data = data.copy()
+    else:
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.set_xlim(0, width)                  
+        ax.set_ylim(0, height)  
+        
+    xdata=[]
+    ydata=[]
+    neigbordata=[]
+    alive_count=0
+
     for w in range(width):
         for h in range(height):
             near_by_block=0
@@ -60,14 +73,39 @@ def is_alive():
             # Born Value
             if born.count(near_by_block)>0 and current_map[h][w]==0:
                 next_map[h][w]=1
+                xdata.append(h)
+                ydata.append(w)
+
+                alive_count+=1
             #Survive Value
             elif survive.count(near_by_block)>0 and current_map[h][w]==1:
                 next_map[h][w]=1
+                xdata.append(h)
+                ydata.append(w)
+
+                alive_count+=1
             else:
                 next_map[h][w]=0
 
-            if next_map[h][w]==1:
-                plot_data[w][h] = [cell_color[0],cell_color[1],cell_color[2],1.0]
+            if printing_method=="picture":
+                if next_map[h][w]==1:
+                    plot_data[w][h] = [cell_color[0],cell_color[1],cell_color[2],1.0]
+
+            neigbordata.append(near_by_block)
+
+    if printing_method=="text":
+        for a in range(height):
+            for b in range(width):
+                label = str(neigbordata[a*width+b])
+                plt.text(a,b,label)
+
+    if printing_method=="point":
+        ax.scatter(xdata,ydata,marker='s', color = 'blue')
+
+    if printing_method=="picture":
+        plt.imshow(plot_data)
+        plt.pause(0.001)
+        plt.clf()
 
     if testing:
         for m in range(len(history_map)):
@@ -77,9 +115,8 @@ def is_alive():
     current_map=next_map
     history_map.append(next_map.copy())
     next_map=[[0 for i in range(width)] for j in range(height)]
-    pyplot.imshow(plot_data)
-    pyplot.pause(0.001)
-    pyplot.clf()
+    print(alive_count)
+    plt.show()
 
 def compare_map(a,b):
     for i in range(len(a)):

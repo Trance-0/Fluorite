@@ -5,8 +5,8 @@ import os
 import random
 
 #basic variables
-width=10
-height=10
+width=50
+height=50
 history_map=[]
 current_map=[]
 next_map=[]
@@ -15,9 +15,9 @@ count=0
 is_game_continue=True
 borad_color=[255,255,255]
 cell_color=[0,0,0]
-testing=False
+testing=True
 max_running_time=1024
-printing_method="text"
+printing_method="point"
 survive=[2,3]
 born=[3]
 
@@ -88,7 +88,7 @@ def is_alive():
                 plt.text(a,b,label)
 
     elif printing_method=="point":
-        ax.scatter(xdata,ydata, color = 'blue')
+        ax.scatter(xdata,ydata,marker='s', color = 'blue')
 
     if testing:
         for m in range(len(history_map)):
