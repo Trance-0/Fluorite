@@ -13,13 +13,16 @@ def all_to_dec(datatype,text):
     return value
 
 def dec_to_all(datatype,value):
-    result=[]
+    result=""
     pointer=0
     while pointer<value:
         pointer+=1
     for k in range(pointer):
-        result.append(datatype[value//k**len(datatype)])
+        result.join(datatype[value//k**len(datatype)])
         value=value%(value//k**len(datatype))
-    
-dec_to_all(vaue)
+    return result
+
+def all_to_all (data,tran,resu):
+    return dec_to_all(resu,all_to_dec(tran,data))
+
         
