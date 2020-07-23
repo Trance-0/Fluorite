@@ -25,10 +25,13 @@ cc.Class({
     // //     this.node.y=this.enemy.node.y;
     // // },
 
-    // // start () {
-
-    // // },
-
+    start () {
+        cc.director.getCollisionManager().enabled=true;
+    },
+    onCollisionEnter: function (other, self) {
+        // console.log(other.node._name);
+        self.node.destroy();
+    },
     update (dt) {
         this.node.y-=this.speed;
     //     if (this.node.lastShoot>this.shootTime*60){

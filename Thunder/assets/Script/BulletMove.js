@@ -24,12 +24,20 @@ cc.Class({
     //     this.node.y=this.player.node.y;
     // },
 
-    // start () {
+    start () {
+        cc.director.getCollisionManager().enabled=true;
+    },
 
-    // },
+    onCollisionEnter: function (other, self) {
+        // console.log(other.node._name);
+        self.node.destroy();
+    },
 
     update (dt) {
         this.node.y+=this.speed;
+        if (this.node.y>350){
+            this.node.destroy();
+        }
         // if (this.node.lastShoot>this.shootTime*60){
         //     this.node.x=this.player.node.x;
         //     this.node.y=this.player.node.y;

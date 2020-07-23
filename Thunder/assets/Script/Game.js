@@ -17,11 +17,22 @@ cc.Class({
             default: [],
             type: cc.Sprite
         },
+        playerBullets: {
+            default: [],
+            type: cc.Sprite
+        },
         player: {
             default: null,
             type: cc.Sprite
         },
-
+        LifeBar: {
+            default: null,
+            type: cc.Sprite
+        },
+        EnergyBar: {
+            default: null,
+            type: cc.Sprite
+        },
         playerBulletPF: {
             default: null,
             type: cc.Prefab
@@ -30,19 +41,25 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
-        ememyBulletFrequecy:100000,
-        time:0
+        ememyBulletFrq: 100000,
+        enemyFrq: 5,
+        time: 0,
+        warningDistance: 100,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
-        for (i = 0; i < 10; i++) {
+        window.Global = {
+            score: 0
+        };
+        this.schedule(function () {
             var enemy = cc.instantiate(this.enemyPF);
             this.enemies.push(enemy);
             this.node.addChild(this.enemies[this.enemies.length - 1]);
-        }
-        console.log(this.enemies);
+        }, this.enemyFrq);
+        this.node.LifeBar = this.LifeBar;
+        // console.log(this.enemies);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
 
     },
@@ -53,9 +70,8 @@ cc.Class({
     // },
 
     start() {
-        // for (i=0;i<10;i++){
-        //     this.spawnEnemy();
-        // }
+        console.log(cc.find("Score"));
+        this.node.score = this.score;
     },
 
 
@@ -65,38 +81,43 @@ cc.Class({
             case cc.macro.KEY.space:
                 var newbullet = cc.instantiate(this.playerBulletPF);
                 newbullet.setPosition(this.player.node.x, this.player.node.y);
-                this.node.addChild(newbullet);
+                this.playerBullets.push(newbullet);
+                this.node.addChild(this.playerBullets[this.playerBullets.length - 1]);
                 break;
         }
     },
 
-    ClearNullArr(arr){
-        for(var i=0,len=arr.length;i<len;i++){
-        if(arr[i]._objFlags!=0){
-            arr.splice(i,1);
-            len--;
-            i--;
+
+    ClearNullArr(arr) {
+        for (var i = 0, len = arr.length; i < len; i++) {
+            if (arr[i]._objFlags != 0) {
+                arr.splice(i, 1);
+                len--;
+                i--;
             }
-            }
+        }
         return arr;
-        },
+    },
 
     update(dt) {
-        this.enemies=this.ClearNullArr(this.enemies);
+        this.enemies = this.ClearNullArr(this.enemies);
+        this.playerBullets = this.ClearNullArr(this.playerBullets);
 
-        console.log(this.enemies);
-        if (this.time>this.ememyBulletFrequecy){
-            for(i=0;i<this.enemies.length;i++){
+        this.node.LifeBar.node._components[0].node._components[1].progress = this.player.node.Life / 100;
+        // console.log(this.node.LifeBar.node._components[0].node._components[1].progress);
+        // console.log(this.enemies);
+        if (this.time > this.ememyBulletFrq) {
+            for (i = 0; i < this.enemies.length; i++) {
                 var newbullet = cc.instantiate(this.enemyBulletPF);
                 newbullet.setPosition(this.enemies[i].x, this.enemies[i].y);
                 this.node.addChild(newbullet);
             }
-            this.time=0;
+            this.time = 0;
         }
-        this.time+=1;
+        this.time += 1;
         for (i = 0; i < this.enemies.length; i++) {
-            for (j=0;j<this.enemies.length;j++){
-                if (j!=i&&Math.pow(this.enemies[j].x-this.enemies[i].x,2)+Math.pow(this.enemies[j].y-this.enemies[i].y,2)<2500){
+            for (j = 0; j < this.enemies.length; j++) {
+                if (j != i && Math.pow(this.enemies[j].x - this.enemies[i].x, 2) + Math.pow(this.enemies[j].y - this.enemies[i].y, 2) < 2500) {
                     if (Math.abs(this.enemies[j].x - this.enemies[i].x) < 60) {
                         if (this.enemies[j].x > this.enemies[i].x) {
                             this.enemies[i].x -= this.enemies[i].xs;
@@ -115,24 +136,22 @@ cc.Class({
                     }
                 }
             }
-            if (Math.abs(this.player.node.x - this.enemies[i].x) < 80) {
-                if (this.player.node.x > this.enemies[i].x) {
-                    this.enemies[i].x -= this.enemies[i].xs;
-                }
-                else {
-                    this.enemies[i].x += this.enemies[i].xs;
-                }
-            }
-            else {
-                if (this.player.node.x > this.enemies[i].x) {
-                    this.enemies[i].x += this.enemies[i].xs;
-                }
-                else {
-                    this.enemies[i].x -= this.enemies[i].xs;
+
+
+            console.log(this.playerBullets);
+            for (j = 0; j < this.playerBullets.length; j++) {
+                if (Math.abs(this.playerBullets[j].x - this.enemies[i].x) < this.warningDistance) {
+                    if (this.playerBullets[j].x > this.enemies[i].x) {
+                        this.enemies[i].x -= this.enemies[i].xs;
+                    }
+                    else {
+                        this.enemies[i].x += this.enemies[i].xs;
+                    }
                 }
             }
 
-            if (Math.abs(this.player.node.y - this.enemies[i].y) < 80) {
+
+            if (Math.abs(this.player.node.y - this.enemies[i].y) < this.warningDistance) {
                 if (this.player.node.y > this.enemies[i].y) {
                     this.enemies[i].y -= this.enemies[i].ys;
                 }

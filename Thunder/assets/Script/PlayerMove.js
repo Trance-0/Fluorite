@@ -11,12 +11,13 @@ cc.Class({
     properties: {
         ySpeed:5,
         xSpeed:10,
+        Life:100,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-
+        this.node.Life=this.Life;
         this.node.xs=0;
         this.node.ys=0;
         // Initialize the keyboard input listening
@@ -25,10 +26,27 @@ cc.Class({
     },
 
     start () {
+        cc.director.getCollisionManager().enabled=true;
+    },
 
+    onCollisionEnter: function (other, self) {
+        if(other.node._name=="Enemy"){
+        self.node.Life-=10;
+        }
+        if(other.node._name=="enemy Bullet"){
+        self.node.Life-=1;
+        }
+        console.log(self.node.Life);
+        // if(other.node._name=="Enemy"){
+
+        // }
+        // console.log(self)
     },
 
     update (dt) {
+        if (this.node.Life<0){
+            cc.director.loadScene("Gameover")
+        }
         if(this.node.x<-123){
             this.node.x=-123
         }

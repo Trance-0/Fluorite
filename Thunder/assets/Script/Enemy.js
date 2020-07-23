@@ -38,7 +38,8 @@ cc.Class({
     },
 
     onCollisionEnter: function (other, self) {
-        console.log('on collision enter');
+        // console.log(other.node._name);
+        window.Global["score"]+=1;
         self.node.destroy();
     },
     // update (dt) {
