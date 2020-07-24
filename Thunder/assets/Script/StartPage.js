@@ -9,18 +9,25 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-      button:cc.Button
+      button:cc.Button,
+      SettingButton:cc.Button
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.button.node.on("click",this.callback,this)
+       
+        this.SettingButton.node.on("click",this.callback1,this)
+        this.button.node.on("click",this.callback2,this)
     },
 
-    callback:function(button){
+    callback1:function(button){
+        cc.director.loadScene("Setting")
+    },
+    
+    callback2:function(button){
         cc.director.loadScene("Game")
-    }
+    },
     // start () {
 
     // },

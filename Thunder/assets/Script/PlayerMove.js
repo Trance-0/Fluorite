@@ -47,17 +47,17 @@ cc.Class({
         if (this.node.Life<0){
             cc.director.loadScene("Gameover")
         }
-        if(this.node.x<-123){
-            this.node.x=-123
+        if(this.node.x<-175){
+            this.node.x=-175
         }
-        if(this.node.x>121){
-            this.node.x=121
+        if(this.node.x>175){
+            this.node.x=175
         }
-        if(this.node.y<-283){
-            this.node.y=-283
+        if(this.node.y<-325){
+            this.node.y=-325
         }
-        if(this.node.y>289){
-            this.node.y=289
+        if(this.node.y>325){
+            this.node.y=325
         }
         this.node.y+=this.node.ys;
         this.node.x+=this.node.xs;

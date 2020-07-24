@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.1" orientation="isometric" renderorder="right-down" width="20" height="20" tilewidth="186" tileheight="138" infinite="0" nextlayerid="14" nextobjectid="48">
+<map version="1.4" tiledversion="1.4.1" orientation="isometric" renderorder="right-down" width="20" height="20" tilewidth="186" tileheight="138" infinite="0" nextlayerid="14" nextobjectid="67">
  <tileset firstgid="1" name="map2" tilewidth="178" tileheight="350" tilecount="50" columns="10">
   <image source="map2.png" width="1780" height="1750"/>
   <tile id="0">
@@ -368,7 +368,80 @@
 51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51
 </data>
  </layer>
- <objectgroup id="7" name="flyer"/>
+ <objectgroup id="7" name="flyer">
+  <object id="48" name="3_9" type="11" x="460.469" y="1299.53">
+   <properties>
+    <property name="index" type="int" value="11"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="54" name="5_8" type="6" x="709.267" y="1159.82">
+   <properties>
+    <property name="Index" type="int" value="6"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="55" name="9_3" type="12" x="1271.5" y="459.413">
+   <properties>
+    <property name="Index" type="int" value="12"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="56" name="6_10" type="2" x="859.883" y="1423.75">
+   <properties>
+    <property name="Index" type="int" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="57" name="12_8" type="0" x="1703.87" y="1161.58">
+   <properties>
+    <property name="Index" type="int" value="0"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="58" name="8_6" type="3" x="1149.85" y="871.965">
+   <properties>
+    <property name="Index" type="int" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="59" name="10_12" type="1" x="1416.48" y="1688.97">
+   <properties>
+    <property name="Index" type="int" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="60" name="10_5" type="7" x="1434.9" y="746.921">
+   <properties>
+    <property name="Index" type="int" value="7"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="61" name="13_10" type="4" x="1836.42" y="1429.03">
+   <properties>
+    <property name="Index" type="int" value="4"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="62" name="15_9" type="9" x="2105.16" y="1298.48">
+   <properties>
+    <property name="Index" type="int" value="9"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="64" name="8_13" type="5" x="1181.41" y="1858.59">
+   <properties>
+    <property name="Index" type="int" value="5"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="65" name="9_15" type="10" x="1275.01" y="2114.08">
+   <properties>
+    <property name="Index" type="int" value="10"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
  <layer id="6" name="spaceship" width="20" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

@@ -13,8 +13,7 @@ cc.Class({
         //     default:null,
         //     type:cc.Sprite,
         // },
-       speed:10,
-       life:3,
+       speed:0.01,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -31,12 +30,12 @@ cc.Class({
 
     onCollisionEnter: function (other, self) {
         // console.log(other.node._name);
-        self.life-=1;
+        // self.life-=1;
     },
 
     update (dt) {
-        this.node.y+=this.speed;
-        if (this.node.y>350||this.life<0){
+        this.node.scale+=this.speed;
+        if (this.node.scale>30){
             this.node.destroy();
         }
         // if (this.node.lastShoot>this.shootTime*60){

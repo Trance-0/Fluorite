@@ -16,8 +16,8 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        console.log(window.Global["score"]);
-        // this.button.node.on("click",this.callback,this)
+        // console.log(window.Global["score"]);
+        this.button.node.on("click",this.callback,this)
     },
 
     callback:function(button){
