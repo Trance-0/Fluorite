@@ -28,7 +28,7 @@ cc.Class({
 
     onLoad () {
         this.node.x=Math.random()*300-150;
-        this.node.y=Math.random()*300;
+        this.node.y=300;
         this.node.xs=this.xspeed;
         this.node.ys=this.yspeed;
     },

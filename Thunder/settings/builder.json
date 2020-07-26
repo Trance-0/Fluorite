@@ -1,7 +1,7 @@
 {
   "title": "lesson_1",
   "packageName": "",
-  "startScene": "f856ca74-d23c-4cee-a382-d635c478874a",
+  "startScene": "6b05a1fe-23e6-4db5-9ae1-80664cfc685a",
   "excludeScenes": [],
   "includeSDKBox": false,
   "orientation": {
@@ -40,5 +40,5 @@
     "skipRecord": false
   },
   "appBundle": false,
-  "includeAnySDK": false
+  "includeAnySDK": null
 }

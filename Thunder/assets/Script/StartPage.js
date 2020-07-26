@@ -16,7 +16,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-       
+       console.log(window.Global)
         this.SettingButton.node.on("click",this.callback1,this)
         this.button.node.on("click",this.callback2,this)
     },

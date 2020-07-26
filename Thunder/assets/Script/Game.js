@@ -45,20 +45,23 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        button: cc.Button,
         ememyBulletFrq: 100000,
-        enemyFrq: 5,
+
         time: 0,
         warningDistance: 100,
-        lastscore:0,
-        energy:0,
-        bombConLength:1,
+        lastscore: 0,
+        energy: 0,
+        bombConLength: 1,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
-        this.node.Auto_fire=window.Global["Auto_fire"];
-        if(window.Global["Auto_fire"]){
+
+        this.node.enemyFrq = window.Global["enemyFrequency"];
+        this.node.autoFire = window.Global["autoFire"];
+        if (window.Global["autoFire"]) {
             this.schedule(function () {
                 var newbullet = cc.instantiate(this.playerBulletPF);
                 newbullet.setPosition(this.player.node.x, this.player.node.y);
@@ -70,43 +73,50 @@ cc.Class({
             var enemy = cc.instantiate(this.enemyPF);
             this.enemies.push(enemy);
             this.node.addChild(this.enemies[this.enemies.length - 1]);
-        }, this.enemyFrq);
+        }, this.node.enemyFrq);
         this.node.LifeBar = this.LifeBar;
-        this.node.EnergyBar=this.EnergyBar;
+        this.node.EnergyBar = this.EnergyBar;
+        this.node.EnergyBar.node._components[0].node._components[1].progress = 0;
 
         // console.log(this.enemies);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
-
+        this.button.node.on("click", this.callback, this);
+        this.node.getChildByName("button")._components[0].interactable = false;
+        this.node.score = this.score;
+        window.Global["score"] = 0;
     },
 
-    // spawnEnemy(){
-    //     var newEnemy=cc.instantiate(this.enemyPF);
-    //     this.node.addChild(newEnemy);
-    // },
+
+    callback: function (button) {
+        var newBomb = cc.instantiate(this.bombPF);
+        newBomb.setPosition(this.player.node.x, this.player.node.y);
+        this.node.addChild(newBomb);
+        this.node.EnergyBar.node._components[0].node._components[1].progress = 0;
+        this.node.getChildByName("button")._components[0].interactable = false
+    },
 
     start() {
         // console.log(cc.find("Score"));
-        this.node.score = this.score;
+
     },
 
 
     onKeyDown(event) {
-        // set a flag when key pressed
         switch (event.keyCode) {
             case cc.macro.KEY.space:
-                if (!this.node.Auto_fire){
-                var newbullet = cc.instantiate(this.playerBulletPF);
-                newbullet.setPosition(this.player.node.x, this.player.node.y);
-                this.playerBullets.push(newbullet);
-                this.node.addChild(this.playerBullets[this.playerBullets.length - 1]);
-                break;
+                if (!this.node.autoFire) {
+                    var newbullet = cc.instantiate(this.playerBulletPF);
+                    newbullet.setPosition(this.player.node.x, this.player.node.y);
+                    this.playerBullets.push(newbullet);
+                    this.node.addChild(this.playerBullets[this.playerBullets.length - 1]);
+                    break;
                 }
             case cc.macro.KEY.k:
-                if (this.node.EnergyBar.node._components[0].node._components[1].progress >=1){
+                if (this.node.EnergyBar.node._components[0].node._components[1].progress >= 1) {
                     var newBomb = cc.instantiate(this.bombPF);
                     newBomb.setPosition(this.player.node.x, this.player.node.y);
                     this.node.addChild(newBomb);
-                    this.node.EnergyBar.node._components[0].node._components[1].progress=0;
+                    this.node.EnergyBar.node._components[0].node._components[1].progress = 0;
                 }
         }
     },
@@ -124,30 +134,46 @@ cc.Class({
     },
 
     update(dt) {
-        this.energy=window.Global["score"]-this.lastscore;
-        this.lastscore=window.Global["score"];
-
-
-        var score_label=this.node.getChildByName("Score");
-        var showlabel=score_label.getComponent(cc.Label);
-        showlabel.node._components[0].string="[ "+window.Global["score"]+" ]";
-        // console.log(showlabel.node._components[0].string);
-
-        this.enemies = this.ClearNullArr(this.enemies);
-        this.playerBullets = this.ClearNullArr(this.playerBullets);
-        // console.log(this.node.getChildByName("Bomb"));
-        if (this.node.getChildByName("Bomb")==null){
-        this.node.EnergyBar.node._components[0].node._components[1].progress +=this.energy/50;
+        // console.log(this.node.getChildByName("button")._components[0].interactable);
+        if (window.Global["mobileMode"]) {
+            // console.log("I")
+            if (this.node.EnergyBar.node._components[0].node._components[1].progress >= 1) {
+                // console.log("II")
+                this.node.getChildByName("button")._components[0].interactable = true
+            }
         }
+        this.updateScore();
+        // console.log(showlabel.node._components[0].string);
+        // console.log(this.node.EnergyBar);
+        this.updateEnergyBar();
+        this.updateLifeBar();
+        this.enemiesBulletsGenerate();
+        this.enemiesMove();
+    },
+    updateScore() {
+        this.energy = window.Global["score"] - this.lastscore;
+        this.lastscore = window.Global["score"];
+        var score_label = this.node.getChildByName("Score");
+        var showlabel = score_label.getComponent(cc.Label);
+        showlabel.node._components[0].string = "[ " + window.Global["score"] + " ]";
+    },
+    updateEnergyBar() {
+        if (this.node.getChildByName("Bomb") == null) {
+            this.node.EnergyBar.node._components[0].node._components[1].progress += this.energy / 50;
+        }
+    },
+    updateLifeBar() {
         this.node.LifeBar.node._components[0].node._components[1].progress = this.player.node.Life / 100;
-        if (this.node.LifeBar.node._components[0].node._components[1].progress<0.5){
-            this.node.LifeBar.node.children[0].color = cc.color(255,510*this.node.LifeBar.node._components[0].node._components[1].progress,510*this.node.LifeBar.node._components[0].node._components[1].progress,255);
+        if (this.node.LifeBar.node._components[0].node._components[1].progress < 0.5) {
+            this.node.LifeBar.node.children[0].color = cc.color(255, 510 * this.node.LifeBar.node._components[0].node._components[1].progress, 510 * this.node.LifeBar.node._components[0].node._components[1].progress, 255);
             // this.node.LifeBar.node.children[0].color.b=0; 
         }
-        // console.log(this.node.LifeBar.node._components[0].node._components[1].progress);
-        // console.log(this.node.LifeBar);
+    },
+    enemiesBulletsGenerate() {
+        this.enemies = this.ClearNullArr(this.enemies);
+        this.playerBullets = this.ClearNullArr(this.playerBullets);
         if (this.time > this.ememyBulletFrq) {
-            for (i = 0; i < this.enemies.length; i++) {
+            for (var i = 0; i < this.enemies.length; i++) {
                 var newbullet = cc.instantiate(this.enemyBulletPF);
                 newbullet.setPosition(this.enemies[i].x, this.enemies[i].y);
                 this.node.addChild(newbullet);
@@ -155,8 +181,11 @@ cc.Class({
             this.time = 0;
         }
         this.time += 1;
-        for (i = 0; i < this.enemies.length; i++) {
-            for (j = 0; j < this.enemies.length; j++) {
+    },
+    enemiesMove() {
+        this.enemies = this.ClearNullArr(this.enemies);
+        for (var i = 0; i < this.enemies.length; i++) {
+            for (var j = 0; j < this.enemies.length; j++) {
                 if (j != i && Math.pow(this.enemies[j].x - this.enemies[i].x, 2) + Math.pow(this.enemies[j].y - this.enemies[i].y, 2) < 2500) {
                     if (Math.abs(this.enemies[j].x - this.enemies[i].x) < 60) {
                         if (this.enemies[j].x > this.enemies[i].x) {
@@ -179,7 +208,7 @@ cc.Class({
 
 
             // console.log(this.playerBullets);
-            for (j = 0; j < this.playerBullets.length; j++) {
+            for (var j = 0; j < this.playerBullets.length; j++) {
                 if (Math.abs(this.playerBullets[j].x - this.enemies[i].x) < this.warningDistance) {
                     if (this.playerBullets[j].x > this.enemies[i].x) {
                         this.enemies[i].x -= this.enemies[i].xs;
@@ -213,11 +242,11 @@ cc.Class({
             if (this.enemies[i].x > 150) {
                 this.enemies[i].x = 150;
             }
-            if (this.enemies[i].y < -290) {
-                this.enemies[i].y = -290;
+            if (this.enemies[i].y < -200) {
+                this.enemies[i].y = -200;
             }
-            if (this.enemies[i].y > 290) {
-                this.enemies[i].y = 290;
+            if (this.enemies[i].y > 310) {
+                this.enemies[i].y = 310;
             }
         }
     },

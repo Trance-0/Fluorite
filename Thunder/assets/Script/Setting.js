@@ -9,28 +9,35 @@ cc.Class({
     extends: cc.Component,
     properties: {
         button:cc.Button,
-        toggle:cc.Toggle,
+        autoFire:cc.Toggle,
+        mobileMode:cc.Toggle,
       },
   
       // LIFE-CYCLE CALLBACKS:
   
       onLoad () {
-          // console.log(window.Global["score"]);
+          // console.log(3.Global["score"]);
           
           this.button.node.on("click",this.callback,this)
       },
   
       callback:function(button){
-        window.Global["Auto_fire"]=this.node.getChildByName("toggle").getComponent(cc.Toggle).isChecked;
+        // console.log(this.node)
+        window.Global["mobileMode"]=this.node.getChildByName("mobileMode")._components[0].isChecked;
+        console.log(this.node.getChildByName("mobileMode")._components[0].isChecked)
+        window.Global["autoFire"]=this.node.getChildByName("autoFire")._components[0].isChecked;
+        console.log(this.node.getChildByName("autoFire")._components[0].isChecked)
         cc.director.loadScene("StartPage");
-        console.log(window.Global["Auto_fire"]);
+        // console.log(window.Global["Auto_fire"]);
       },
       // start () {
   
       // },
   
       update (dt) {
-
+        if(this.node.getChildByName("mobileMode")._components[0].isChecked){
+          this.node.getChildByName("autoFire")._components[0].isChecked=true;
+        }
         //   console.log(this.node)
       },
 });
