@@ -2,7 +2,7 @@ from PIL import Image
 import os
 # Read an image file
 path = os.path.dirname(os.path.abspath(__file__))
-magic = path + '/' + 'Screen Shot 2020-04-23 at 22.19.34.png'
+magic = path + '/' + 'natsuki.png'
 image = Image.open(magic)
 x, y = image.size
 pim = image.load()
