@@ -81,7 +81,7 @@ while data != '':#直到音频放完
     ax.axes.yaxis.set_visible(False)
     ax.axes.xaxis.set_ticks([])
     ax.axes.yaxis.set_ticks([])
-    plt.pause(0.0000001)
+    plt.pause(0.001)
     plt.close()
     # fig.canvas.draw()
 
