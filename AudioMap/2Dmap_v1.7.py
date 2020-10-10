@@ -9,6 +9,7 @@ numpydata = np.fromstring(binary_data, dtype=np.int16)
 w.close()
 maxvalue=0
 minvalue=0
+print (numpydata.size)
 for i in numpydata:
     temp=i+32768
     if temp>maxvalue:
