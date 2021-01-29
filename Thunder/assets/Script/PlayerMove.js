@@ -9,6 +9,10 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        boardXMax:320,
+        boardXMin:320,
+        boardYMax:320,
+        boardYMin:320,
         ySpeed: 5,
         xSpeed: 10,
         Life: 100,
@@ -24,38 +28,38 @@ cc.Class({
         // Initialize the keyboard input listening
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
-        if(window.Global["mobileMode"]){
-        this.node.on('touchmove', function (event) {
+        // if(window.Global["mobileMode"]){
+        // this.node.on('touchmove', function (event) {
 
-            if (event.getLocationX()-175 > this.node.x) {
-                this.node.xs = this.xSpeed;
-            }
-            else if (event.getLocationX()-175 < this.node.x) {
-                this.node.xs = -this.xSpeed;
-            }
-            else {
-                this.node.xs = 0;
-            }
-            if (event.getLocationY()-320 > this.node.y) {
-                this.node.ys = this.ySpeed;
-            }
-            else if (event.getLocationY()-320 < this.node.y) {
-                this.node.ys = -this.ySpeed;
-            }
-            else {
-                this.node.ys = 0;
-            }
+        //     if (event.getLocationX()-320 > this.node.x) {
+        //         this.node.xs = this.xSpeed;
+        //     }
+        //     else if (event.getLocationX()-320 < this.node.x) {
+        //         this.node.xs = -this.xSpeed;
+        //     }
+        //     else {
+        //         this.node.xs = 0;
+        //     }
+        //     if (event.getLocationY()-320 > this.node.y) {
+        //         this.node.ys = this.ySpeed;
+        //     }
+        //     else if (event.getLocationY()-320 < this.node.y) {
+        //         this.node.ys = -this.ySpeed;
+        //     }
+        //     else {
+        //         this.node.ys = 0;
+        //     }
 
-        }.bind(this));
-        this.node.on('touchend', function (event) {
-            this.node.xs = 0;
-            this.node.ys = 0;
-        }.bind(this));
-        this.node.on('touchcancel', function (event) {
-            this.node.xs = 0;
-            this.node.ys = 0;
-        }.bind(this));
-    }
+        // }.bind(this));
+        // this.node.on('touchend', function (event) {
+        //     this.node.xs = 0;
+        //     this.node.ys = 0;
+        // }.bind(this));
+        // this.node.on('touchcancel', function (event) {
+        //     this.node.xs = 0;
+        //     this.node.ys = 0;
+        // }.bind(this));
+    // }
     },
     
 
@@ -77,17 +81,17 @@ cc.Class({
         if (this.node.Life < 0) {
             cc.director.loadScene("Gameover")
         }
-        if (this.node.x < -175) {
-            this.node.x = -175
+        if (this.node.x < boardXMin) {
+            this.node.x = boardXMin
         }
-        if (this.node.x > 175) {
-            this.node.x = 175
+        if (this.node.x > boardXMax) {
+            this.node.x = boardXMax
         }
-        if (this.node.y < -325) {
-            this.node.y = -325
+        if (this.node.y < boardYMin) {
+            this.node.y = boardYMin
         }
-        if (this.node.y > 325) {
-            this.node.y = 325
+        if (this.node.y > boardYMax) {
+            this.node.y = boardYMax
         }
         this.node.y += this.node.ys;
         this.node.x += this.node.xs;

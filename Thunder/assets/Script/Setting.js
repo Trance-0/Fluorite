@@ -27,7 +27,7 @@ cc.Class({
         console.log(this.node.getChildByName("mobileMode")._components[0].isChecked)
         window.Global["autoFire"]=this.node.getChildByName("autoFire")._components[0].isChecked;
         console.log(this.node.getChildByName("autoFire")._components[0].isChecked)
-        cc.director.loadScene("StartPage");
+        cc.director.loadScene("Start");
         // console.log(window.Global["Auto_fire"]);
       },
       // start () {

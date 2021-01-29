@@ -23,7 +23,7 @@ cc.Class({
     },
 
     start () {
-        cc.director.loadScene("StartPage");
+        cc.director.loadScene("Start");
     },
 
     // update (dt) {},

@@ -63,10 +63,7 @@ cc.Class({
         this.node.autoFire = window.Global["autoFire"];
         if (window.Global["autoFire"]) {
             this.schedule(function () {
-                var newbullet = cc.instantiate(this.playerBulletPF);
-                newbullet.setPosition(this.player.node.x, this.player.node.y);
-                this.playerBullets.push(newbullet);
-                this.node.addChild(this.playerBullets[this.playerBullets.length - 1]);
+                fire();
             }, 0.2);
         }
         this.schedule(function () {
@@ -250,4 +247,10 @@ cc.Class({
             }
         }
     },
+    fire(){
+        var newbullet = cc.instantiate(this.playerBulletPF);
+                newbullet.setPosition(this.player.node.x, this.player.node.y);
+                this.playerBullets.push(newbullet);
+                this.node.addChild(this.playerBullets[this.playerBullets.length - 1]);
+    }
 });
