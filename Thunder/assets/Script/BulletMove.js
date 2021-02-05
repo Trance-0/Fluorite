@@ -9,21 +9,9 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        // player:{
-        //     default:null,
-        //     type:cc.Sprite,
-        // },
        speed:10,
        life:3,
     },
-
-    // LIFE-CYCLE CALLBACKS:
-
-    // onLoad () {
-    //     this.node.lastShoot=0;
-    //     this.node.x=this.player.node.x;
-    //     this.node.y=this.player.node.y;
-    // },
 
     start () {
         cc.director.getCollisionManager().enabled=true;
@@ -38,12 +26,7 @@ cc.Class({
         this.node.y+=this.speed;
         if (this.node.y>350||this.life<0){
             this.node.destroy();
+            console.log("bulletDistroyed");
         }
-        // if (this.node.lastShoot>this.shootTime*60){
-        //     this.node.x=this.player.node.x;
-        //     this.node.y=this.player.node.y;
-        //     this.node.lastShoot=0;
-        // }
-        // this.node.lastShoot+=1
     },
 });

@@ -14,6 +14,7 @@ cc.Class({
         //     type:cc.Sprite,
         // },
        speed:10,
+       marign:-700
     //    shootTime:2,
     },
 
@@ -34,11 +35,8 @@ cc.Class({
     },
     update (dt) {
         this.node.y-=this.speed;
-    //     if (this.node.lastShoot>this.shootTime*60){
-    //         this.node.x=this.enemy.node.x;
-    //         this.node.y=this.enemy.node.y;
-    //         this.node.lastShoot=0;
-    //     }
-    //     this.node.lastShoot+=1
+        if(this.node.y<this.node.marign){
+            self.node.distroy();
+        }
     },
 });

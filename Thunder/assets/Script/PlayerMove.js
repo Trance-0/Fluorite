@@ -81,21 +81,28 @@ cc.Class({
         if (this.node.Life < 0) {
             cc.director.loadScene("Gameover")
         }
-        if (this.node.x < boardXMin) {
-            this.node.x = boardXMin
+        if (this.node.x < this.node.boardXMin) {
+            this.node.x = this.node.boardXMin
         }
-        if (this.node.x > boardXMax) {
-            this.node.x = boardXMax
+        if (this.node.x > this.node.boardXMax) {
+            this.node.x = this.node.boardXMax
         }
-        if (this.node.y < boardYMin) {
-            this.node.y = boardYMin
+        if (this.node.y < this.node.boardYMin) {
+            this.node.y = this.node.boardYMin
         }
-        if (this.node.y > boardYMax) {
-            this.node.y = boardYMax
+        if (this.node.y > this.node.boardYMax) {
+            this.node.y = this.node.boardYMax
         }
         this.node.y += this.node.ys;
         this.node.x += this.node.xs;
 
+    },
+
+    fire(){
+        var newbullet = cc.instantiate(this.playerBulletPF);
+                newbullet.setPosition(this.player.node.x, this.player.node.y);
+                this.playerBullets.push(newbullet);
+                this.node.addChild(this.playerBullets[this.playerBullets.length - 1]);
     },
 
     onKeyDown(event) {
