@@ -13,7 +13,7 @@ def dict_maker(a,b):
 
 def Caesar_cipher(a,b,c):
         d=dict_maker(a,b)
-        c=c.lower()#abc dictionary only
+        # c=c.lower()#abc dictionary only
         c=list(c)
         e=[]
         for i in c:
@@ -25,8 +25,9 @@ def Caesar_cipher(a,b,c):
         return e
                 
 abc=deque(['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'])
+hexset=deque(['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E'])
 asc=deque()
-dictionary=abc
+dictionary=hexset
 print('Input the text that you need to encode.')
 c=input()
 print('Input the move that you need to encode.')
