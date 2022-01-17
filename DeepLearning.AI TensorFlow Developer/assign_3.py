@@ -26,6 +26,9 @@ def train_mnist_conv():
     # Normalize the pixel values of the train and test images, they work better with smaller values.
     x_train  = x_train / 255.0
     x_test = x_test/ 255.0
+    
+    x_train=x_train[:3000]
+    y_train=y_train[:3000]
 
     # Reshape the dataset to meet Conv2D requirement
     training_shape=(len(x_train),x_train[0].shape[0],x_train[0].shape[1],1)
