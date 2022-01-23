@@ -130,7 +130,7 @@ validation_datagen = ImageDataGenerator( rescale = 1.0/255. )
 
 # NOTE: YOU MUST USE A BACTH SIZE OF 10 (batch_size=10) FOR THE 
 # VALIDATION GENERATOR.
-validation_generator = train_datagen.flow_from_directory(VALIDATION_DIR,
+validation_generator = validation_datagen.flow_from_directory(VALIDATION_DIR,
                                                     batch_size=10,
                                                     class_mode='binary',
                                                     target_size=(300, 300))  
