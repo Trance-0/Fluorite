@@ -1,35 +1,12 @@
-# ATTENTION: Please do not alter any of the provided code in the exercise. Only add your own code where indicated
-# ATTENTION: Please do not add or remove any cells in the exercise. The grader will check specific cells based on the cell position.
-# ATTENTION: Please use the provided epoch values when training.
-
-import matplotlib.pyplot as plt
-import csv
 import numpy as np
+import csv
+import matplotlib.pyplot as plt
+import keras
 import tensorflow as tf
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+from tensorflow.keras.utils import to_categorical
+from keras.preprocessing.image import ImageDataGenerator
 from os import getcwd
-import sys
-
-
-def progressbar(it, prefix="", size=29, file=sys.stdout):
-    # This def is made by: https://stackoverflow.com/users/1207193/iambr
-    # it is the list you are going to iterate
-    # prefix is the title of your progress bar
-    # size is the length of your progress bar
-    count = len(it)
-
-    def show(j):
-        x = int(size*j/count)
-        file.write("%s[%s%s%s] %i/%i\r" %
-                   (prefix, "="*x, ">", "."*(size-x), j, count))
-        file.flush()
-    show(0)
-    for i, item in enumerate(it):
-        yield item
-        show(i+1)
-    file.write("\n")
-    file.flush()
-
 
 def get_data(filename):
   # You will need to write code that will read the file passed
@@ -59,18 +36,21 @@ def get_data(filename):
 
 
 # full data set
-# path_sign_mnist_train = f'{getcwd()}/tmp2/sign_mnist_train.csv'
-# path_sign_mnist_test = f'{getcwd()}/tmp2/sign_mnist_test.csv'
+path_sign_mnist_train = f'{getcwd()}/tmp2/sign_mnist_train.csv'
+path_sign_mnist_test = f'{getcwd()}/tmp2/sign_mnist_test.csv'
 
 # reduce training set
-path_sign_mnist_train = f'{getcwd()}/tmp2/sign_mnist_train_a.csv'
-path_sign_mnist_test = f'{getcwd()}/tmp2/sign_mnist_test_a.csv'
+# path_sign_mnist_train = f'{getcwd()}/tmp2/sign_mnist_train_a.csv'
+# path_sign_mnist_test = f'{getcwd()}/tmp2/sign_mnist_test_a.csv'
 
 training_images, training_labels = get_data(path_sign_mnist_train)
 testing_images, testing_labels = get_data(path_sign_mnist_test)
 
-training_images = training_images/255.
-testing_images = testing_images/255.
+training_labels = to_categorical(training_labels, 25)
+testing_labels = to_categorical(testing_labels,25)
+
+training_images = training_images / 255.0
+testing_images = testing_images / 255.0
 
 # Keep these
 print(training_images.shape)
@@ -86,43 +66,42 @@ print(testing_labels)
 # (7172,)
 
 # Testing code, do not submit them to your assignment!
-plt.imshow(testing_images[1], interpolation='nearest')
+
+fig = plt.figure(figsize = (8, 8))
+rows, columns = 4, 4
+
+for i in range(1, (rows * columns) + 1):
+    imageIndex = i
+    fig.add_subplot(rows, columns, i)
+    plt.imshow(training_images[imageIndex], cmap = 'gray')
+    
 plt.show()
-print(testing_labels[1])
 
 # In this section you will have to add another dimension to the data
 # So, for example, if your array is (10000, 28, 28)
 # You will need to make it (10000, 28, 28, 1)
 # Hint: np.expand_dims
 
-train_datagen = ImageDataGenerator(
-    featurewise_center=False,  # set input mean to 0 over the dataset
-    samplewise_center=False,  # set each sample mean to 0
-    featurewise_std_normalization=False,  # divide inputs by std of the dataset
-    samplewise_std_normalization=False,  # divide each input by its std
-    zca_whitening=False,  # apply ZCA whitening
-    # randomly rotate images in the range (degrees, 0 to 180)
-    rotation_range=14,
-    zoom_range=0.09,  # Randomly zoom image
-    # randomly shift images horizontally (fraction of total width)
-    width_shift_range=0.14,
-    # randomly shift images vertically (fraction of total height)
-    height_shift_range=0.14,
-    horizontal_flip=False,  # randomly flip images
-    vertical_flip=False,   # randomly flip images
-    brightness_range=(0.8, 1.0),  # brightness of image
-    rescale=1. / 255.)
+dataGenerator = tf.keras.preprocessing.image.ImageDataGenerator(
+        featurewise_center=False,  # set input mean to 0 over the dataset
+        samplewise_center=False,  # set each sample mean to 0
+        featurewise_std_normalization=False,  # divide inputs by std of the dataset
+        samplewise_std_normalization=False,  # divide each input by its std
+        zca_whitening=False,  # apply ZCA whitening
+        rotation_range=14,  # randomly rotate images in the range (degrees, 0 to 180)
+        zoom_range = 0.09, # Randomly zoom image 
+        width_shift_range=0.14,  # randomly shift images horizontally (fraction of total width)
+        height_shift_range=0.14,  # randomly shift images vertically (fraction of total height)
+        horizontal_flip=False,  # randomly flip images
+        vertical_flip=False,   # randomly flip images
+        brightness_range = (0.8, 1.0),  # brightness of image
+        rescale = 1 / 255.0)  # Normalization output
+
 
 training_images = np.reshape(training_images, (-1, 28, 28, 1))
-train_datagen.fit(training_images)
 testing_images = np.reshape(testing_images, (-1, 28, 28, 1))
-
-training_labels = tf.keras.utils.to_categorical(
-    training_labels, num_classes=25)
-testing_labels = tf.keras.utils.to_categorical(testing_labels, num_classes=25)
-
-batch_size = 16
-
+                                
+dataGenerator.fit(training_images)
 # Keep These
 print(training_images.shape)
 print(testing_images.shape)
@@ -131,8 +110,6 @@ print(testing_images.shape)
 # (27455, 28, 28, 1)
 # (7172, 28, 28, 1)
 
-# Define the model
-# Use no more than 2 Conv2D and 2 MaxPooling2D
 model = tf.keras.models.Sequential([
     # Your Code Here
     tf.keras.layers.Conv2D(64, (3, 3), activation='relu',
@@ -141,31 +118,19 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.Conv2D(32, (3, 3), activation='relu'),
     tf.keras.layers.MaxPooling2D(2, 2),
     tf.keras.layers.Flatten(),
-    tf.keras.layers.Dropout(0.2),
     tf.keras.layers.Dense(64, activation='relu'),
-    tf.keras.layers.Dropout(0.2),
+    tf.keras.layers.Dropout(0.5),
     tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dropout(0.2),
+    tf.keras.layers.Dropout(0.5),
     tf.keras.layers.Dense(25, activation='softmax')
 ])
 
-# Compile Model.
-model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0005),
-              loss='categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer = tf.keras.optimizers.Adam(learning_rate = 0.0005) , loss = 'categorical_crossentropy' , metrics = ['accuracy'])
 
 model.summary()
 
-# Train the Model
-history = model.fit_generator(train_datagen.flow(
-    training_images,
-    training_labels, batch_size=batch_size),
-    validation_data=(testing_images, testing_labels),
-    steps_per_epoch=len(
-    training_images)//batch_size,
-    epochs=10
-)
-
-# model.evaluate(testing_images/255., testing_labels, verbose=0)
+history = model.fit(dataGenerator.flow(training_images, training_labels, batch_size = 16) ,epochs = 10, 
+                    validation_data = (testing_images, testing_labels))
 
 # Plot the chart for accuracy and loss on both training and validation
 acc = history.history['accuracy']
