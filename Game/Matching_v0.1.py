@@ -4,32 +4,40 @@ import collections
 
 # some basic configuration
 
-WIDTH = 10
-HEIGHT = 10
-COLOR = 5
+WIDTH = 5
+HEIGHT = 5
+COLOR = 4
 MAXIMUM_REACTION =20
 MOVE_COUNT = 30
 CLEAR_LENGTH = 3
 VIZ = 'graph'
 
 class game:
+    # First, this game would calculate all the possible move at init
+    # while in game
+    # if the move code matched the possible future graph, then move the game to possbile future and calculate the game again
     def __init__(self,width,height,color,move_count,clear_length=3,viz_method=None,max_reaction=100):
         self.height=height
         self.width=width
         self.move_count=move_count
         self.color=color
+        self.clear_length=clear_length
         self.checkpoints=[]
         self.score=0
         self.shuffle()
         self.max_reaction=max_reaction
         self.viz_method=viz_method
+        self.update(add_score=False)
         # vertical pattern
 
-    def generate_move(self,move_code):
+    def get_move(self,move_code):
+        # generate move from move code
         unit_a=[]
         unit_b=[]
+        # test if the move code is legal
         if(move_code>=self.width*(self.height-1)+self.height*(self.width-1)):
             raise ValueError('move code is higher than width*(height-1)+height*(width-1)!')
+        # convert move code to real move
         if(move_code>self.height*(self.width-1)):
             x=move_code//(self.width-1)
             y=move_code%(self.width-1)
@@ -41,16 +49,8 @@ class game:
             x=move_code%(self.height-1)
             unit_a=[x,y]
             unit_b=[x+1,y]
-        self.move(unit_a,unit_b)
-
-    def visualize(self):
-        if(self.viz_method=='graph'):
-            plt.imshow(self.data, cmap = 'hsv')   
-            plt.show()
+        return unit_a,unit_b
     
-    def is_illegal_move(self,unit_a,unit_b):
-        return (unit_a[0]==unit_b[0] and unit_a[1]!=unit_a[1])or(unit_a[0]!=unit_b[0] and unit_a[1]==unit_a[1])
-
     def get_move_code(self,unit_a,unit_b):
         if(self.is_illegal_move(unit_a,unit_b)):
             raise ValueError('input is not legal move')
@@ -59,41 +59,79 @@ class game:
         else:
             return (self.height-1)*self.width+unit_a[1]*self.height+Math.min(unit_a[0],unit_b[0])
 
-    def move(self,unit_a,unit_b,real_move=True):
-        if(self.is_illegal_move(unit_a,unit_b)):
+
+    def visualize(self):
+        if(self.viz_method=='graph'):
+            plt.imshow(self.data, cmap = 'hsv')   
+            plt.show()
+    
+    def is_illegal_move(self,graph,unit_a,unit_b):
+        return (unit_a[0]==unit_b[0] and unit_a[1]!=unit_a[1])or(unit_a[0]!=unit_b[0] and unit_a[1]==unit_a[1]) and unit_a[0]>=0 and unit_a[1]<graph.shape()[0] and unit_b[0]>=0 and unit_b[1]<graph.shape()[1]
+
+    
+    def move(self,graph,unit_a,unit_b):
+        if(self.is_illegal_move(graph,unit_a,unit_b)):
             raise ValueError('input is not legal move')
         # real move means to change the actual data in self
-        if(real_move):
-            swap=self.data[unit_a[0]][unit_a[1]]
-            self.data[unit_a[0]][unit_a[1]]=self.data[unit_b[0]][unit_b[1]]
-            self.data[unit_b[0]][unit_b[1]]=swap
-            self.move_count-=1
-            self.update()
-        # here you return a copy of self.data as a possibility
-        else:
-            return None
-
+        swap=graph[unit_a[0]][unit_a[1]]
+        graph[unit_a[0]][unit_a[1]]=graph[unit_b[0]][unit_b[1]]
+        graph[unit_b[0]][unit_b[1]]=swap
+        return graph
             
     def playable_check(self):
         for i in (self.width-1)*self.height+self.width*(self.height-1):
             # if the game is playable after generate_move(i)
-            return True
-        return False
+            pos_graph=self.move(self.get_move(self,i))
             
-        
-    def matchable_check(self,data,unit):
-        matchable_units=[]
-        # to check whether objects around pos: unit is matchable
-        # vertical match
-        # horizontal match
-        # return a list of matchable units
-        return matchable_units
 
-    def unit_check(self,unit,add_score=True):
-        # remove mathcable elements arond unit
-        # add score
-        # move other element downward and add moved units to checkpoints
-        return None
+            
+
+    def unit_check(self,graph,unit):
+        current_color=graph[unit[0],unit[1]]
+        vertical_match=np.array([[]])
+        for i in range(1,unit[0]):
+            if(graph[unit[0]-i,unit[1]]==current_color):
+                np.append(vertical_match, [unit[0]-i,unit[1]])
+            else:
+                break
+        for i in range(unit[0],graph.shape()[0]):
+            if(graph[i,unit[1]]==current_color):
+                np.append(vertical_match, [i,unit[1]])
+            else:
+                break
+        horizontal_match=np.array([[]])
+        for i in range(1,unit[1]):
+            if(graph[unit[0],unit[1]-i]==current_color):
+                np.append(horizontal_match, [unit[0],unit[1]-i])
+            else:
+                break
+        for i in range(1,unit[0]):
+            if(graph[unit[0],i]==current_color):
+                np.append(horizontal_match, [unit[0],i])
+            else:
+                break
+        return horizontal_match,vertical_match
+        
+    
+    def fall(self,graph,horizontal_match,vertical_match):
+        score=0
+        # for this version, we ignore the possibility that vertical match and horizontal match are both greater than desired match
+        if(vertical_match.shape()[0]>self.clear_length):
+            for i in vertical_match:
+                score+=1
+                for j in range(0,i[1]-1):
+                    graph[i[0],i[1]-j]=graph[i[0],i[1]-j+1]
+                    self.checkpoints.append([i[0],i[1]-j])
+                graph[i[0],0]=np.random.randint(self.color)
+        elif(horizontal_match.shape()[0]>self.clear_length):
+            for i in horizontal_match:
+                score+=1
+                for j in range(0,i[1]-1):
+                    graph[i[0],i[1]-j]=graph[i[0],i[1]-j+1]
+                    self.checkpoints.append([i[0],i[1]-j])
+                graph[i[0],0]=np.random.randint(self.color)
+        # move other element downward and add moved units to checkpoint
+        return score, graph
 
     def shuffle(self):
         # restart the game
@@ -106,6 +144,7 @@ class game:
         while(len(self.checkpoints)>0):
             unit_check(self.checkpoints.pop(),add_score)
             self.visualize()
+            self.playable_check()
             if(not self.playable_check()):
                 print('no new move avaliable')
                 self.shuffle()
