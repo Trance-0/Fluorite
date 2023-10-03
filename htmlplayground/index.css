@@ -1,0 +1,31 @@
+/* Hide the toggle checkbox */
+#expand-toggle {
+    /* display: none; */
+  }
+  
+  /* Hide expandable content by default */
+  .expandable {
+    visibility: hidden;
+    background: #ddd;
+  }
+  
+  /* Style the button */
+  #expand-btn {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 5px 11px;
+    background-color: #ff7;
+    border: 1px solid;
+    border-radius: 3px;
+  }
+  
+  /* Show hidden content when the checkbox is checked */
+  #expand-toggle:checked ~ * .expandable {
+    visibility: visible;
+  }
+  
+  /* Style the button when the checkbox is checked */
+  #expand-toggle:checked ~ #expand-btn {
+    background-color: #ccc;
+  }
+  

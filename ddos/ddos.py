@@ -7,7 +7,7 @@ attack_num=0
 port = 443
 
 def get_fake_ip():
-    return f'{random.randrange(0,255)}.{random.randrange(0,255)}.{random.randrange(0,255)}.{random.randrange(0,255)}'
+    return f'107.{random.randrange(0,255)}.{random.randrange(0,255)}.{random.randrange(0,255)}'
 
 def attack():
 
