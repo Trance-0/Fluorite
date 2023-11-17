@@ -19,9 +19,9 @@ def attack():
 
         global attack_num
         attack_num += 1
-        if (attack_num %1000==0): print(attack_num)
+        if (attack_num %10==0): print(attack_num)
         s.close()
 
-for i in range(5000):
+for i in range(1):
     thread = threading.Thread(target=attack)
     thread.start()
