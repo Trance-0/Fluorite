@@ -1,0 +1,1 @@
+docker build . -t trancezero/<name>:v1

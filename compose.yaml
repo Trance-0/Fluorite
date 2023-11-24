@@ -1,0 +1,61 @@
+version: '3.7'
+
+volumes:
+  db-data:
+  wp-content:
+networks:
+  wp-back:
+
+services:
+  db:
+    # We use a mariadb image which supports both amd64 & arm64 architecture
+    image: mariadb:10.6.4-focal
+    # If you really want to use MySQL, uncomment the following line
+    #image: mysql:8.0.27
+    command: '--default-authentication-plugin=mysql_native_password'
+    volumes:
+      - db-data:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${SQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${SQL_DATABASE}
+      - MYSQL_USER=${SQL_USERNAME}
+      - MYSQL_PASSWORD=${SQL_USER_PASSWORD}
+    ports:
+      - 8889:3306
+    networks:
+      - wp-back
+
+  phpmyadmin:
+    depends_on:
+      - db
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_HOST=db
+      - MYSQL_USER=${SQL_USERNAME}
+      - MYSQL_PASSWORD=${SQL_USER_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${SQL_ROOT_PASSWORD}
+    ports:
+      - 3001:80
+    networks:
+      - wp-back
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    volumes:
+      - wp-content:/var/www/html/wp-content
+    ports:
+      - 8888:80
+      - 443:443
+    restart: always
+    environment:
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_USER=${SQL_USERNAME}
+      - WORDPRESS_DB_PASSWORD=${SQL_USER_PASSWORD}
+      - WORDPRESS_DB_NAME=${SQL_DATABASE}
+    networks:
+      - wp-back
+  
+    
