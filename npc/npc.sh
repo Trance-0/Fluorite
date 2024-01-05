@@ -1,0 +1,1 @@
+docker run -d --net=host --name npc --mount source=conf,target=/conf trancezero/npc:v0.26.1
