@@ -13,8 +13,9 @@ RUN apt-get update \
     && cd ${BUILD_PREFIX} \
     && /usr/local/bin/python -m pip install --no-cache --upgrade pip \
     && pip install --no-cache -r requirements.txt \
-    && pip install --no-cache -r requirements-optional.txt \
-    && pip install azure-cognitiveservices-speech
+    && pip install --no-cache -r requirements-optional.txt
+
+RUN pip install azure-cognitiveservices-speech
 
 WORKDIR ${BUILD_PREFIX}
 
