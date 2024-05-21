@@ -1,0 +1,9 @@
+version: "3"
+services:
+  # 在这里给容器起一个名字, 例如 sakura1
+  sakura-frp:
+    env_file:
+      - .env
+    image: natfrp/frpc
+    restart: on-failure:5
+    command: -f ${FRPC_VAR}
