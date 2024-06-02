@@ -1,1 +1,0 @@
-docker build . -t trancezero/npc:v0.26.1  

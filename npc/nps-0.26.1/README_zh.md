@@ -2,7 +2,7 @@
 # nps
 ![](https://img.shields.io/github/stars/ehang-io/nps.svg)   ![](https://img.shields.io/github/forks/ehang-io/nps.svg)
 [![Gitter](https://badges.gitter.im/cnlh-nps/community.svg)](https://gitter.im/cnlh-nps/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Build Status](https://travis-ci.org/ehang-io/nps.svg?branch=master)](https://travis-ci.org/ehang-io/nps)
+![Release](https://github.com/ehang-io/nps/workflows/Release/badge.svg)
 ![GitHub All Releases](https://img.shields.io/github/downloads/ehang-io/nps/total)
 
 [README](https://github.com/ehang-io/nps/blob/master/README.md)|[中文文档](https://github.com/ehang-io/nps/blob/master/README_zh.md)
@@ -49,6 +49,16 @@ nps是一款轻量级、高性能、功能强大的**内网穿透**代理服务�
 对于linux|darwin ```sudo ./nps install```
 
 对于windows，管理员身份运行cmd，进入安装目录 ```nps.exe install```
+
+- 默认端口
+
+nps默认配置文件使用了80，443，8080，8024端口
+
+80与443端口为域名解析模式默认端口
+
+8080为web管理访问端口
+
+8024为网桥端口，用于客户端与服务器通信
 
 - 启动
 

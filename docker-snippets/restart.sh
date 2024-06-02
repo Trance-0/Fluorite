@@ -1,0 +1,1 @@
+docker update --restart=on-failure:5 mc-server-snapshot

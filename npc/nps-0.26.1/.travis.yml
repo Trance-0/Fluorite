@@ -1,12 +1,11 @@
 language: go
 
 go:
-  - "1.13"
-  - master
+  - 1.14.x
 services:
   - docker
 script:
-  - go test -v ./cmd/nps/
+  - GOPROXY=direct go test -v ./cmd/nps/
 os:
   - linux
 before_deploy:
@@ -14,9 +13,9 @@ before_deploy:
 
 deploy:
   provider: releases
-  api_key:
-    secure: ${TOKEN}
-  skip_cleanup: true
+  edge: true
+  token: ${GH_TOKEN}
+  cleanup: false
   file:
   - freebsd_386_client.tar.gz
   - freebsd_386_server.tar.gz

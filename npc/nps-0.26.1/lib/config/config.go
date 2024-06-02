@@ -17,6 +17,7 @@ type CommonConfig struct {
 	AutoReconnection bool
 	ProxyUrl         string
 	Client           *file.Client
+	DisconnectTime   int
 }
 
 type LocalServer struct {
@@ -145,6 +146,10 @@ func dealCommon(s string) *CommonConfig {
 			c.Client.MaxConn = common.GetIntNoErrByStr(item[1])
 		case "remark":
 			c.Client.Remark = item[1]
+		case "pprof_addr":
+			common.InitPProfFromArg(item[1])
+		case "disconnect_timeout":
+			c.DisconnectTime = common.GetIntNoErrByStr(item[1])
 		}
 	}
 	return c
@@ -297,7 +302,7 @@ func delLocalService(s string) *LocalServer {
 
 func getAllTitle(content string) (arr []string, err error) {
 	var re *regexp.Regexp
-	re, err = regexp.Compile(`\[.+?\]`)
+	re, err = regexp.Compile(`(?m)^\[[^\[\]\r\n]+\]`)
 	if err != nil {
 		return
 	}

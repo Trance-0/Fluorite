@@ -28,7 +28,12 @@ func (s *ClientController) List() {
 		clientId = clientIdSession.(int)
 	}
 	list, cnt := server.GetClientList(start, length, s.getEscapeString("search"), s.getEscapeString("sort"), s.getEscapeString("order"), clientId)
-	s.AjaxTable(list, cnt, cnt)
+	cmd := make(map[string]interface{})
+	ip := s.Ctx.Request.Host
+	cmd["ip"] = common.GetIpByAddr(ip)
+	cmd["bridgeType"] = beego.AppConfig.String("bridge_type")
+	cmd["bridgePort"] = server.Bridge.TunnelPort
+	s.AjaxTable(list, cnt, cnt, cmd)
 }
 
 //添加客户端
@@ -60,10 +65,6 @@ func (s *ClientController) Add() {
 				InletFlow:  0,
 				FlowLimit:  int64(s.GetIntNoErr("flow_limit")),
 			},
-		}
-		if t.RateLimit > 0 {
-			t.Rate = rate.NewRate(int64(t.RateLimit * 1024))
-			t.Rate.Start()
 		}
 		if err := file.GetDb().NewClient(t); err != nil {
 			s.AjaxErr(err.Error())
@@ -101,6 +102,8 @@ func (s *ClientController) Edit() {
 	} else {
 		if c, err := file.GetDb().GetClient(id); err != nil {
 			s.error()
+			s.AjaxErr("client ID not found")
+			return
 		} else {
 			if s.getEscapeString("web_username") != "" {
 				if s.getEscapeString("web_username") == beego.AppConfig.String("web_username") || !file.GetDb().VerifyUserName(s.getEscapeString("web_username"), c.Id) {

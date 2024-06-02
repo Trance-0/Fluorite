@@ -3,7 +3,7 @@
 
 **方式一：** 类似于nginx实现https的处理
 
-在配置文件中将https_proxy_port设置为443或者其他你想配置的端口，和在web中对应域名编辑中设置对应的证书路径，将`https_just_proxy`设置为false，然后就和http代理一样了
+在配置文件中将https_proxy_port设置为443或者其他你想配置的端口，将`https_just_proxy`设置为false，nps 重启后，在web管理界面，域名新增或修改界面中修改域名证书和密钥。
 
 **此外：** 可以在`nps.conf`中设置一个默认的https配置，当遇到未在web中设置https证书的域名解析时，将自动使用默认证书，另还有一种情况就是对于某些请求的clienthello不携带sni扩展信息，nps也将自动使用默认证书
 
@@ -14,18 +14,18 @@
 
 ## 与nginx配合
 
-有时候我们还需要在云服务器上运行nginx来保证静态文件缓存等，本代理可和nginx配合使用，在配置文件中将httpProxyPort设置为非80端口，并在nginx中配置代理，例如httpProxyPort为8024时
+有时候我们还需要在云服务器上运行nginx来保证静态文件缓存等，本代理可和nginx配合使用，在配置文件中将httpProxyPort设置为非80端口，并在nginx中配置代理，例如httpProxyPort为8010时
 ```
 server {
     listen 80;
     server_name *.proxy.com;
     location / {
         proxy_set_header Host  $http_host;
-        proxy_pass http://127.0.0.1:8024;
+        proxy_pass http://127.0.0.1:8010;
     }
 }
 ```
-如需使用https也可在nginx监听443端口并配置ssl，并将本代理的httpsProxyPort设置为空关闭https即可，例如httpProxyPort为8024时
+如需使用https也可在nginx监听443端口并配置ssl，并将本代理的httpsProxyPort设置为空关闭https即可，例如httpProxyPort为8020时
 
 ```
 server {
@@ -40,7 +40,7 @@ server {
     ssl_prefer_server_ciphers on;
     location / {
         proxy_set_header Host  $http_host;
-        proxy_pass http://127.0.0.1:8024;
+        proxy_pass http://127.0.0.1:8020;
     }
 }
 ```

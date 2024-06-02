@@ -1,5 +1,5 @@
 # 服务端配置文件
-- /conf/nps.conf
+- /etc/nps/conf/nps.conf
 
 名称 | 含义
 ---|---
@@ -19,3 +19,6 @@ log_level|日志输出级别
 auth_crypt_key | 获取服务端authKey时的aes加密密钥，16位
 p2p_ip| 服务端Ip，使用p2p模式必填
 p2p_port|p2p模式开启的udp端口
+pprof_ip|debug pprof 服务端ip
+pprof_port|debug pprof 端口
+disconnect_timeout|客户端连接超时，单位 5s，默认值 60，即 300s = 5mins

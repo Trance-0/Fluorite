@@ -17,10 +17,10 @@ import (
 	"ehang.io/nps/server/tool"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
-	"github.com/shirou/gopsutil/cpu"
-	"github.com/shirou/gopsutil/load"
-	"github.com/shirou/gopsutil/mem"
-	"github.com/shirou/gopsutil/net"
+	"github.com/shirou/gopsutil/v3/cpu"
+	"github.com/shirou/gopsutil/v3/load"
+	"github.com/shirou/gopsutil/v3/mem"
+	"github.com/shirou/gopsutil/v3/net"
 )
 
 var (
@@ -85,8 +85,8 @@ func DealBridgeTask() {
 }
 
 //start a new server
-func StartNewServer(bridgePort int, cnf *file.Tunnel, bridgeType string) {
-	Bridge = bridge.NewTunnel(bridgePort, bridgeType, common.GetBoolByStr(beego.AppConfig.String("ip_limit")), RunList)
+func StartNewServer(bridgePort int, cnf *file.Tunnel, bridgeType string, bridgeDisconnect int) {
+	Bridge = bridge.NewTunnel(bridgePort, bridgeType, common.GetBoolByStr(beego.AppConfig.String("ip_limit")), RunList, bridgeDisconnect)
 	go func() {
 		if err := Bridge.StartTunnel(); err != nil {
 			logs.Error("start server bridge error", err)
