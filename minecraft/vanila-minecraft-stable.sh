@@ -1,0 +1,1 @@
+docker run -d --name mc-server-1.21 -v minecraft-vanila-1.21:/data -e VERSION=1.21 -e MEMORY=8G -p 25525:25525 -e EULA=TRUE itzg/minecraft-server:java21
