@@ -1,1 +1,6 @@
 *.env
+.env.*
+
+# nginx-proxy-manager-data
+nginx-proxy-manager/data
+nginx-proxy-manager/letsencrypt
