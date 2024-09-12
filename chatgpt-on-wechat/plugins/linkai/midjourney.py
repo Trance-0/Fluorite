@@ -68,7 +68,7 @@ class MJTask:
 # midjourney bot
 class MJBot:
     def __init__(self, config):
-        self.base_url = conf().get("linkai_api_base", "https://api.link-ai.chat") + "/v1/img/midjourney"
+        self.base_url = conf().get("linkai_api_base", "https://api.link-ai.tech") + "/v1/img/midjourney"
         self.headers = {"Authorization": "Bearer " + conf().get("linkai_api_key")}
         self.config = config
         self.tasks = {}
@@ -88,6 +88,8 @@ class MJBot:
         context = e_context['context']
         if context.type == ContextType.TEXT:
             cmd_list = context.content.split(maxsplit=1)
+            if not cmd_list:
+                return None
             if cmd_list[0].lower() == f"{trigger_prefix}mj":
                 return TaskType.GENERATE
             elif cmd_list[0].lower() == f"{trigger_prefix}mju":

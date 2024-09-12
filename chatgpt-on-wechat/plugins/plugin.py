@@ -18,6 +18,7 @@ class Plugin:
         if not plugin_conf:
             # 全局配置不存在，则获取插件目录下的配置
             plugin_config_path = os.path.join(self.path, "config.json")
+            logger.debug(f"loading plugin config, plugin_config_path={plugin_config_path}, exist={os.path.exists(plugin_config_path)}")
             if os.path.exists(plugin_config_path):
                 with open(plugin_config_path, "r", encoding="utf-8") as f:
                     plugin_conf = json.load(f)
@@ -46,3 +47,6 @@ class Plugin:
 
     def get_help_text(self, **kwargs):
         return "暂无帮助信息"
+
+    def reload(self):
+        pass

@@ -8,6 +8,8 @@ ENV BUILD_PREFIX=/app
 
 ADD . ${BUILD_PREFIX}
 
+COPY ./config.json /app/config.json
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends bash ffmpeg espeak libavcodec-extra\
     && cd ${BUILD_PREFIX} \
