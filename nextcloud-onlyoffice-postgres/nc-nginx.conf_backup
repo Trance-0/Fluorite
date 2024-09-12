@@ -53,8 +53,6 @@ http {
 
     server {
         listen 80;
-        listen 443;
-        listen [::]:443;
 	# The below allows for being behind a reverse proxy and allowing the Nextcloud app to connect
         server_tokens off;
 
