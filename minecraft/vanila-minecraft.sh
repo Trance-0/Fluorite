@@ -1,1 +1,0 @@
-docker run -d --name mc-server-1.19 -v minecraft-vanila-1.19:/data -e VERSION=1.19 -e MEMORY=4G -p 25535:25565 -e EULA=TRUE itzg/minecraft-server

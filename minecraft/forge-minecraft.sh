@@ -1,1 +1,0 @@
-docker run -d --name mc-server-1.16.5 -e TYPE=FORGE -v minecraft-pixelmon-1.16.5:/data -e VERSION=1.16.5 -e FORGE_VERSION=36.2.35 -e MEMORY=4G -p 25545:25565 -e EULA=TRUE itzg/minecraft-server:java8-multiarch
